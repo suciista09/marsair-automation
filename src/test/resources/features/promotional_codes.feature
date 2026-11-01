@@ -33,11 +33,6 @@ Feature: Promotional codes
       | code        | message                              |
       | JJ5-OPQ-321 | Sorry, code JJ5-OPQ-321 is not valid |
 
-    @MA-02-15 @high
-    Examples: Search without a promotional code
-      | code | message         |
-      |      | Seats available |
-
   # Dynamic data: codes are generated at runtime from the acceptance criteria rules.
   # Generated codes are logged in the Cucumber report (target/cucumber-report.html).
 

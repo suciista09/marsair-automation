@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
+import java.util.List;
+
 /**
  * Flight search form on the MarsAir home page.
  */
@@ -49,5 +51,22 @@ public class SearchFormPage extends BasePage {
         click(searchButton);
         wait.until(ExpectedConditions.stalenessOf(form));
         return new SearchResultPage(driver);
+    }
+
+    /** Visible option labels of the departing dropdown, without the "Select..." placeholder. */
+    public List<String> departingOptions() {
+        return optionLabels(departingDropdown);
+    }
+
+    /** Visible option labels of the returning dropdown, without the "Select..." placeholder. */
+    public List<String> returningOptions() {
+        return optionLabels(returningDropdown);
+    }
+
+    private List<String> optionLabels(By dropdown) {
+        return new Select(visible(dropdown)).getOptions().stream()
+                .filter(option -> !option.getDomAttribute("value").isEmpty())
+                .map(option -> option.getText().trim())
+                .toList();
     }
 }
