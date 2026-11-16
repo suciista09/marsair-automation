@@ -11,12 +11,12 @@ Feature: Search date dropdowns
     When the user opens the "<dropdown>" dropdown
     Then it only shows July and December options
 
-    @MA-01-03 @medium
+    @MA-01-03 @medium @ready
     Examples: Departing
       | dropdown  |
       | departing |
 
-    @MA-01-04 @medium
+    @MA-01-04 @medium @ready
     Examples: Returning
       | dropdown  |
       | returning |
@@ -30,12 +30,12 @@ Feature: Search date dropdowns
       | July (two years from now)     |
       | December (two years from now) |
 
-    @MA-01-05 @medium
+    @MA-01-05 @medium @ready
     Examples: Departing
       | dropdown  |
       | departing |
 
-    @MA-01-06 @medium
+    @MA-01-06 @medium @ready
     Examples: Returning
       | dropdown  |
       | returning |
@@ -51,12 +51,12 @@ Feature: Search date dropdowns
       | July (two years from now)     |
       | December (two years from now) |
 
-    @MA-01-07 @low
+    @MA-01-07 @low @ready
     Examples: Departing
       | dropdown  |
       | departing |
 
-    @MA-01-08 @low
+    @MA-01-08 @low @ready
     Examples: Returning
       | dropdown  |
       | returning |

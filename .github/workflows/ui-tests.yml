@@ -5,6 +5,11 @@ on:
     branches: [ main ]
   pull_request:
   workflow_dispatch:          # adds a "Run workflow" button
+    inputs:
+      tags:
+        description: 'Cucumber tags, e.g. @high. Default @ready. Type all to run everything'
+        required: false
+        default: '@ready'
 
 jobs:
   ui-tests:
@@ -30,11 +35,18 @@ jobs:
           echo "Grid not ready"; docker compose logs; exit 1
 
       - name: Run tests
-        run: mvn -B clean test -Dgrid.url=http://localhost:4444
+        env:
+          TAGS: ${{ github.event.inputs.tags || '@ready'}}
+        run: |
+          if [ "$TAGS" = "all" ]; then
+            mvn -B clean test -Dgrid.url=http://localhost:4444
+          else
+            mvn -B clean test -Dgrid.url=http://localhost:4444 -Dcucumber.filter.tags="$TAGS"
+          fi
 
       - name: Upload Cucumber report
         if: always()            # upload even when tests fail
-        uses: actions/upload-artifact@v7.0.2
+        uses: actions/upload-artifact@v7
         with:
           name: cucumber-report
           path: target/cucumber-reports/
