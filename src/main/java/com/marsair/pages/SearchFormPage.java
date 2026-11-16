@@ -45,14 +45,6 @@ public class SearchFormPage extends BasePage {
         return this;
     }
 
-    public SearchResultPage search() {
-        // Wait for the form page to be replaced, so the result page isn't read from the old DOM
-        WebElement form = visible(departingDropdown);
-        click(searchButton);
-        wait.until(ExpectedConditions.stalenessOf(form));
-        return new SearchResultPage(driver);
-    }
-
     /** Visible option labels of the departing dropdown, without the "Select..." placeholder. */
     public List<String> departingOptions() {
         return optionLabels(departingDropdown);
@@ -68,5 +60,13 @@ public class SearchFormPage extends BasePage {
                 .filter(option -> !option.getDomAttribute("value").isEmpty())
                 .map(option -> option.getText().trim())
                 .toList();
+    }
+
+    public SearchResultPage search() {
+        // Wait for the form page to be replaced, so the result page isn't read from the old DOM
+        WebElement form = visible(departingDropdown);
+        click(searchButton);
+        wait.until(ExpectedConditions.stalenessOf(form));
+        return new SearchResultPage(driver);
     }
 }

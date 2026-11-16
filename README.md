@@ -42,4 +42,41 @@ Headless, or with another URL:
 mvn clean test -Dheadless=true -Dbase.url=https://...
 ```
 
-Report: `target/cucumber-report.html`
+Reports (in `target/cucumber-reports/`):
+- `cucumber.html`: single-file HTML report, with generated codes and failure screenshots
+- `cucumber.json`: for Cucumber reporting tools and CI plugins
+- `cucumber.xml`: JUnit XML, which most CI tools read for test results
+
+## Run in parallel on Selenium Grid
+
+Scenarios run in parallel (3 threads, set in `src/test/resources/junit-platform.properties`). Each thread gets its own browser.
+
+1. Start the Grid (Docker Desktop must be running): 1 hub + 3 Chrome nodes.
+
+```
+docker compose up -d
+```
+
+2. Open http://localhost:4444/ui to watch the sessions.
+3. Run the tests on the Grid:
+
+```
+mvn clean test -Dgrid.url=http://localhost:4444
+```
+
+4. Stop the Grid:
+
+```
+docker compose down
+```
+
+Without `-Dgrid.url`, tests run on local Chrome (still in parallel).
+
+Change the number of threads, or turn parallel off:
+
+```
+mvn clean test -Dcucumber.execution.parallel.config.fixed.parallelism=2
+mvn clean test -Dcucumber.execution.parallel.enabled=false
+```
+
+Keep the thread count the same as or lower than the number of Chrome nodes (`replicas` in `docker-compose.yml`).

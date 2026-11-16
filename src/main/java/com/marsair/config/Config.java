@@ -38,6 +38,12 @@ public final class Config {
         return Boolean.parseBoolean(get("headless"));
     }
 
+    /** Selenium Grid URL. Empty means run Chrome locally. */
+    public static String gridUrl() {
+        String url = get("grid.url");
+        return url == null ? "" : url.trim();
+    }
+
     public static int timeoutSeconds() {
         return Integer.parseInt(get("timeout.seconds"));
     }

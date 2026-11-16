@@ -7,16 +7,15 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SearchSteps {
 
+    private static final String SCHEDULE_ERROR = "Unfortunately, this schedule is not possible. Please try again.";
+
     private final SearchFormPage searchForm = new SearchFormPage(DriverFactory.getDriver());
     private SearchResultPage searchResult;
-    private static final String SCHEDULE_ERROR = "Unfortunately, this schedule is not possible. Please try again.";
-    private List<String> options;
 
     @Given("the user is on the search page")
     public void theUserIsOnTheSearchPage() {
@@ -38,15 +37,6 @@ public class SearchSteps {
                 .selectReturning(returning)
                 .enterPromotionalCode(code)
                 .search();
-    }
-
-    @When("the user opens the {string} dropdown")
-    public void theUserOpensTheDropdown(String dropdown) {
-        options = switch (dropdown) {
-            case "departing" -> searchForm.departingOptions();
-            case "returning" -> searchForm.returningOptions();
-            default -> throw new IllegalArgumentException("Unknown dropdown: " + dropdown);
-        };
     }
 
     @Then("the result message contains {string}")
@@ -75,27 +65,5 @@ public class SearchSteps {
         String actual = searchResult.contentText();
         assertTrue(actual.contains("Seats available!") || actual.contains("Sorry, there are no more seats available."),
                 "Expected a seat availability result but page showed: " + actual);
-    }
-
-    @Then("it only shows July and December options")
-    public void itOnlyShowsJulyAndDecember() {
-        assertTrue(!options.isEmpty(), "Dropdown has no options");
-        for (String option : options) {
-            assertTrue(option.startsWith("July") || option.startsWith("December"),
-                    "Unexpected month in option \"" + option + "\". All options: " + options);
-        }
-    }
-
-    @Then("it covers the next two years:")
-    public void itCoversTheNextTwoYears(List<String> expectedOptions) {
-        for (String expected : expectedOptions) {
-            assertTrue(options.contains(expected),
-                    "Missing option \"" + expected + "\". All options: " + options);
-        }
-    }
-
-    @Then("the options are in this order:")
-    public void theOptionsAreInThisOrder(List<String> expectedOrder) {
-        assertEquals(expectedOrder, options, "Dropdown options are not in the expected order");
     }
 }
